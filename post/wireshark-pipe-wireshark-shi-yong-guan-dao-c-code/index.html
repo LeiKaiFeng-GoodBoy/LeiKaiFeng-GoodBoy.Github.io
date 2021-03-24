@@ -1,22 +1,97 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://leikaifeng-goodboy.github.io/</id>
-    <title>Gridea</title>
-    <updated>2021-03-24T06:13:17.747Z</updated>
-    <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://leikaifeng-goodboy.github.io/"/>
-    <link rel="self" href="https://leikaifeng-goodboy.github.io/atom.xml"/>
-    <subtitle>温故而知新</subtitle>
-    <logo>https://leikaifeng-goodboy.github.io/images/avatar.png</logo>
-    <icon>https://leikaifeng-goodboy.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2021, Gridea</rights>
-    <entry>
-        <title type="html"><![CDATA[Wireshark Pipe Wireshark 使用管道 C# Code ]]></title>
-        <id>https://leikaifeng-goodboy.github.io/post/wireshark-pipe-wireshark-shi-yong-guan-dao-c-code/</id>
-        <link href="https://leikaifeng-goodboy.github.io/post/wireshark-pipe-wireshark-shi-yong-guan-dao-c-code/">
-        </link>
-        <updated>2021-03-24T06:10:08.000Z</updated>
-        <content type="html"><![CDATA[<p>先说两句</p>
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Wireshark Pipe Wireshark 使用管道 C# Code  | Gridea</title>
+<link rel="shortcut icon" href="https://leikaifeng-goodboy.github.io//favicon.ico?v=1616566319982">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://leikaifeng-goodboy.github.io//styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Wireshark Pipe Wireshark 使用管道 C# Code  | Gridea - Atom Feed" href="https://leikaifeng-goodboy.github.io//atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="先说两句
+主要的问题是虽然可以，但是写入管道的包必须得是从链路层开始的，从ip层开始的办法我没有找到，不代表不行，因为我的需求是从ip层，所以我自己加了一个链路层的头
+加链路层的头也比较简单从Wireshark抓的包中复制一些就可以了
+并且..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://leikaifeng-goodboy.github.io/">
+  <img class="avatar" src="https://leikaifeng-goodboy.github.io//images/avatar.png?v=1616566319982" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              Wireshark Pipe Wireshark 使用管道 C# Code 
+            </h2>
+            <div class="post-info">
+              <span>
+                2021-03-24
+              </span>
+              <span>
+                7 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>先说两句</p>
 <p>主要的问题是虽然可以，但是写入管道的包必须得是从链路层开始的，从ip层开始的办法我没有找到，不代表不行，因为我的需求是从ip层，所以我自己加了一个链路层的头</p>
 <p>加链路层的头也比较简单从Wireshark抓的包中复制一些就可以了</p>
 <p>并且往管道里写单纯的包也不行，必须还要加一些Wireshark支持的协议头，所以也就变成</p>
@@ -284,18 +359,77 @@ namespace Wireshark
 }
 
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[PC端查找草榴论坛最新备用域名]]></title>
-        <id>https://leikaifeng-goodboy.github.io/post/pc-duan-cha-zhao-cao-liu-lun-tan-zui-xin-bei-yong-yu-ming/</id>
-        <link href="https://leikaifeng-goodboy.github.io/post/pc-duan-cha-zhao-cao-liu-lun-tan-zui-xin-bei-yong-yu-ming/">
-        </link>
-        <updated>2021-03-24T06:03:35.000Z</updated>
-        <content type="html"><![CDATA[<p>在浏览器中打开地址<br>
-https://fofa.so/<br>
-然后在搜索栏中输入下面的搜索表达式<br>
-title==&quot;草榴社區 1024 - t66y.com&quot; &amp;&amp; server==&quot;cloudflare&quot;</p>
-]]></content>
-    </entry>
-</feed>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://leikaifeng-goodboy.github.io/post/pc-duan-cha-zhao-cao-liu-lun-tan-zui-xin-bei-yong-yu-ming/">
+              <h3 class="post-title">
+                PC端查找草榴论坛最新备用域名
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://leikaifeng-goodboy.github.io//atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
