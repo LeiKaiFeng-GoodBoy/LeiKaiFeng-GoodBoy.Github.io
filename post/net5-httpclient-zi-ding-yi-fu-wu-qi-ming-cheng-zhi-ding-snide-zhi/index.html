@@ -2,19 +2,20 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PC端查找草榴论坛最新备用域名 | 雷开封的贼窝</title>
+<title>.NET5 HttpClient自定义服务器名称指定(SNI)的值 | 雷开封的贼窝</title>
 <link rel="shortcut icon" href="https://leikaifeng-goodboy.github.io//favicon.ico?v=1616566965884">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://leikaifeng-goodboy.github.io//styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="PC端查找草榴论坛最新备用域名 | 雷开封的贼窝 - Atom Feed" href="https://leikaifeng-goodboy.github.io//atom.xml">
+<link rel="alternate" type="application/atom+xml" title=".NET5 HttpClient自定义服务器名称指定(SNI)的值 | 雷开封的贼窝 - Atom Feed" href="https://leikaifeng-goodboy.github.io//atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="在浏览器中打开地址
-https://fofa.so/
-然后在搜索栏中输入下面的搜索表达式
-title==&quot;草榴社區 1024 - t66y.com&quot; &amp;&amp; server==&quot;cloudflare..." />
+    <meta name="description" content="static async Task Main(string[] args)
+        {
+
+            const string DNS_AND_SNI = &quot;www.pixivision.net&quot;;
+..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -77,7 +78,7 @@ title==&quot;草榴社區 1024 - t66y.com&quot; &amp;&amp; server==&quot;cloudfl
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              PC端查找草榴论坛最新备用域名
+              .NET5 HttpClient自定义服务器名称指定(SNI)的值
             </h2>
             <div class="post-info">
               <span>
@@ -91,10 +92,57 @@ title==&quot;草榴社區 1024 - t66y.com&quot; &amp;&amp; server==&quot;cloudfl
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>在浏览器中打开地址<br>
-https://fofa.so/<br>
-然后在搜索栏中输入下面的搜索表达式<br>
-title==&quot;草榴社區 1024 - t66y.com&quot; &amp;&amp; server==&quot;cloudflare&quot;</p>
+                <pre><code>static async Task Main(string[] args)
+        {
+
+            const string DNS_AND_SNI = &quot;www.pixivision.net&quot;;
+
+            //注意这个地方是http而不是httpps
+            //否则我们不能自定义sslstream
+            const string URI = &quot;http://www.pixiv.net/&quot;;
+
+            var handler = new SocketsHttpHandler()
+            {
+
+                ConnectCallback = (info, token) =&gt;
+                {
+
+                    Console.WriteLine(info.InitialRequestMessage.RequestUri);
+
+                    Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+                    socket.Connect(DNS_AND_SNI, 443);
+
+                    var stream = new NetworkStream(socket, true);
+
+                    SslStream sslstream = new SslStream(stream, false);
+
+                    sslstream.AuthenticateAsClient(new SslClientAuthenticationOptions
+                    {
+                        //sni字符串
+                        TargetHost = DNS_AND_SNI,
+
+                        //tls指定后续的应用层协议
+                        ApplicationProtocols = new List&lt;SslApplicationProtocol&gt;(new SslApplicationProtocol[] { SslApplicationProtocol.Http2 })
+                    });
+
+
+                    return new ValueTask&lt;Stream&gt;(sslstream);
+                }
+            };
+
+
+            HttpClient client = new HttpClient(handler);
+
+            //协议和tls预先指定的保持一致
+            client.DefaultRequestVersion = HttpVersion.Version20;
+
+
+            string s = await client.GetStringAsync(URI);
+
+            Console.WriteLine(s.Length);
+        }
+</code></pre>
 
               </div>
               <div class="toc-container">
@@ -104,6 +152,15 @@ title==&quot;草榴社區 1024 - t66y.com&quot; &amp;&amp; server==&quot;cloudfl
           </article>
         </div>
 
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://leikaifeng-goodboy.github.io/post/net-ji-shi-qian-fa-tls-zheng-shu-bing-qie-chrome-bu-bao-cuo-de-jian-lou-shi-xian/">
+              <h3 class="post-title">
+                .Net 即时签发TLS证书并且Chrome不报错的简陋实现
+              </h3>
+            </a>
+          </div>
         
 
         
