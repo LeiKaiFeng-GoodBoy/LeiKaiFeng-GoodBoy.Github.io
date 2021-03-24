@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://leikaifeng-goodboy.github.io/</id>
     <title>Gridea</title>
-    <updated>2021-03-24T06:02:44.436Z</updated>
+    <updated>2021-03-24T06:09:26.229Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://leikaifeng-goodboy.github.io/"/>
     <link rel="self" href="https://leikaifeng-goodboy.github.io/atom.xml"/>
@@ -11,12 +11,15 @@
     <icon>https://leikaifeng-goodboy.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Gridea</rights>
     <entry>
-        <title type="html"><![CDATA[看看行不行]]></title>
-        <id>https://leikaifeng-goodboy.github.io/post/kan-kan-xing-bu-xing/</id>
-        <link href="https://leikaifeng-goodboy.github.io/post/kan-kan-xing-bu-xing/">
+        <title type="html"><![CDATA[PC端查找草榴论坛最新备用域名]]></title>
+        <id>https://leikaifeng-goodboy.github.io/post/pc-duan-cha-zhao-cao-liu-lun-tan-zui-xin-bei-yong-yu-ming/</id>
+        <link href="https://leikaifeng-goodboy.github.io/post/pc-duan-cha-zhao-cao-liu-lun-tan-zui-xin-bei-yong-yu-ming/">
         </link>
-        <updated>2021-03-24T06:01:17.000Z</updated>
-        <content type="html"><![CDATA[<p>啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊</p>
+        <updated>2021-03-24T06:03:35.000Z</updated>
+        <content type="html"><![CDATA[<p>在浏览器中打开地址<br>
+https://fofa.so/<br>
+然后在搜索栏中输入下面的搜索表达式<br>
+title==&quot;草榴社區 1024 - t66y.com&quot; &amp;&amp; server==&quot;cloudflare&quot;</p>
 ]]></content>
     </entry>
 </feed>
