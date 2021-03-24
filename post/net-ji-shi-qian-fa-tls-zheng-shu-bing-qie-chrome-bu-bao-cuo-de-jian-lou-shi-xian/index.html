@@ -1,0 +1,242 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>.Net 即时签发TLS证书并且Chrome不报错的简陋实现 | 雷开封的贼窝</title>
+<link rel="shortcut icon" href="https://leikaifeng-goodboy.github.io//favicon.ico?v=1616566703031">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://leikaifeng-goodboy.github.io//styles/main.css">
+<link rel="alternate" type="application/atom+xml" title=".Net 即时签发TLS证书并且Chrome不报错的简陋实现 | 雷开封的贼窝 - Atom Feed" href="https://leikaifeng-goodboy.github.io//atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="下面是生成CA证书并且签发一个TLS证书的例子
+X509Certificate2 ca = TLSCertificate.CreateCA(&quot;LeiKaiFeng&quot;, 2048, 365);
+
+X509Certifica..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://leikaifeng-goodboy.github.io/">
+  <img class="avatar" src="https://leikaifeng-goodboy.github.io//images/avatar.png?v=1616566703031" alt="">
+  </a>
+  <h1 class="site-title">
+    雷开封的贼窝
+  </h1>
+  <p class="site-description">
+    
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              .Net 即时签发TLS证书并且Chrome不报错的简陋实现
+            </h2>
+            <div class="post-info">
+              <span>
+                2021-03-24
+              </span>
+              <span>
+                2 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>下面是生成CA证书并且签发一个TLS证书的例子</p>
+<pre><code>X509Certificate2 ca = TLSCertificate.CreateCA(&quot;LeiKaiFeng&quot;, 2048, 365);
+
+X509Certificate2 tlsX509Certificate2 = TLSCertificate.CreateTlsCertificate(&quot;pornhub.com&quot;, ca, 2048, 365, &quot;pornhub.com&quot;, &quot;*.pornhub.com&quot;);
+</code></pre>
+<p>值得注意的地方是返回的X509Certificate2都包含私钥,导出格式不同则可能导出的不会包含私钥</p>
+<p>keySize小于1024浏览器会报错,subjectAltNames参数必须要填一个,现代浏览器基本都需要这个,不然就不会信任</p>
+<p>ca证书的有效时间小于tls证书的时间会爆错,也就是不可能ca过期了tls还没过期</p>
+<p>很简单,也可以直接上代码,主要用到.net标准库里的CertificateRequest类型</p>
+<p>文档地址https://docs.microsoft.com/zh-cn/dotnet/api/system.security.cryptography.x509certificates.certificaterequest?view=netstandard-2.1</p>
+<pre><code>public static class TLSCertificate
+    {
+
+        static X509Extension CreateSubAltName(string[] subjectAltNames)
+        {
+            var builder = new SubjectAlternativeNameBuilder();
+
+            Array.ForEach(subjectAltNames, (s) =&gt; builder.AddDnsName(s));
+
+            return builder.Build(false);
+        }
+
+        static void AddExtension(Collection&lt;X509Extension&gt; extensions, string[] subjectAltNames)
+        {
+
+
+            extensions.Add(new X509KeyUsageExtension(X509KeyUsageFlags.DigitalSignature | X509KeyUsageFlags.KeyEncipherment | X509KeyUsageFlags.DataEncipherment, false));
+            extensions.Add(new X509BasicConstraintsExtension(false, true, 0, false));
+            extensions.Add(CreateSubAltName(subjectAltNames));
+        }
+
+        public static X509Certificate2 CreateTlsCertificate(string commonName, X509Certificate2 caCertificate, int keySize, int days, params string[] subjectAltNames)
+        {
+            string subjectName = $&quot;CN = {commonName}&quot;;
+
+            var rsa = RSA.Create(keySize);
+
+            var certificateRequest = new CertificateRequest(subjectName, rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+
+            AddExtension(certificateRequest.CertificateExtensions, subjectAltNames);
+
+
+
+            var dateTime = DateTime.UtcNow;
+
+
+
+            X509Certificate2 tlsCertificate = certificateRequest.Create(caCertificate, new DateTimeOffset(dateTime), new DateTimeOffset(dateTime.AddDays(days)), caCertificate.GetCertHash().Take(20).ToArray());
+
+            return new X509Certificate2(tlsCertificate.CopyWithPrivateKey(rsa).Export(X509ContentType.Pfx));
+        }
+
+
+        public static X509Certificate2 CreateCA(string commonName, int keySize, int days)
+        {
+            string subjectName = $&quot;CN = {commonName}&quot;;
+
+            var rsa = RSA.Create(keySize);
+
+
+
+            var certificateRequest = new CertificateRequest(subjectName, rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+
+            certificateRequest.CertificateExtensions.Add(new X509BasicConstraintsExtension(true, true, 1, true));
+
+            var dateTime = DateTime.UtcNow;
+
+            return certificateRequest.CreateSelfSigned(new DateTimeOffset(dateTime), new DateTimeOffset(dateTime.AddDays(days)));
+
+        }
+
+        
+    }
+
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://leikaifeng-goodboy.github.io/post/wireshark-pipe-wireshark-shi-yong-guan-dao-c-code/">
+              <h3 class="post-title">
+                Wireshark Pipe Wireshark 使用管道 C# Code 
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://leikaifeng-goodboy.github.io//atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
