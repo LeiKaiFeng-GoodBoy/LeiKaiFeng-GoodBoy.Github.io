@@ -2,13 +2,71 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://leikaifeng-goodboy.github.io/</id>
     <title>雷开封的贼窝</title>
-    <updated>2021-03-24T06:23:40.500Z</updated>
+    <updated>2021-03-26T03:54:02.207Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://leikaifeng-goodboy.github.io/"/>
     <link rel="self" href="https://leikaifeng-goodboy.github.io/atom.xml"/>
     <logo>https://leikaifeng-goodboy.github.io/images/avatar.png</logo>
     <icon>https://leikaifeng-goodboy.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, 雷开封的贼窝</rights>
+    <entry>
+        <title type="html"><![CDATA[浏览器访问网站的流程与干扰]]></title>
+        <id>https://leikaifeng-goodboy.github.io/post/liu-lan-qi-fang-wen-wang-zhan-de-liu-cheng-yu-ying-yong/</id>
+        <link href="https://leikaifeng-goodboy.github.io/post/liu-lan-qi-fang-wen-wang-zhan-de-liu-cheng-yu-ying-yong/">
+        </link>
+        <updated>2021-03-26T00:25:46.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="浏览器访问网站的流程">浏览器访问网站的流程</h1>
+<ol>
+<li>DNS解析IP</li>
+<li>与解析出的IP连接</li>
+<li>建立TLS加密连接</li>
+<li>发送HTTP请求获取网站主HTML</li>
+<li>根据主HTML中的其他链接从第一步开始加载其他资源，例如CSS，JPG，JS</li>
+</ol>
+<h1 id="干扰">干扰</h1>
+<p>根据以上流程，假如外部环境想要干扰我们访问一些网站，可以有如下办法</p>
+<ol>
+<li>DNS污染<br>
+我理解的DNS的作用类似于一个代理，域名一般不会变化，但是IP可能会经常变化，所以通过域名来查询IP，可以非常方便的更换地址，返回请求者所在地最快的IP，把请求分配给不同的IP，比如导向CDN的IP而不是源站的IP，来加快网站的访问速度<br>
+根据DNS的作用，DNS污染按我的理解，可以根本不返回IP地址，返回错误的IP地址，返回访问缓慢的IP地址<br>
+并且一般情况下DNS解析请求是明文的，所以也就很容易被沿途的设备拦截与修改<br>
+而且根据上网方式的不同，DNS服务器可能是自动配置的，所以DNS服务器本身就有问题<br>
+一般而言DNS污染相当有效，但也容易解决<br>
+比如手动映射域名与IP，更换默认的DNS服务器，在DNS服务器与浏览器支持的情况下使用HTTPS进行DNS查询，个人感觉比较有效却没有弹性的是手动映射域名与IP，因为某些情况，知名的DNS服务器可能访问缓慢，并且DNS服务器与浏览器都支持的情况下也可能无法建立HTTPS连接，中间设备阻止</li>
+<li>IP封锁<br>
+IP封锁简单粗暴，但也要看情况，比如并没有封锁全部的IP，只是建立一个黑名单，而不是建立一个只有几个允许IP的白名单，这样的情况下大多数IP还是能够访问的，解决办法就包括代理服务器，但是也有其他办法，根据第一条所说，一个网站为了加速不同地区的访问可能不会只有一个IP，我们可以找到一个没有被封锁的IP然后手动映射域名指向这个IP<br>
+比如有些网站源站IP要么被封锁，要么访问缓慢，并且存在DNS污染，否则的话你会发现，该网站其实可以通过CDN的IP来访问，也就是该网站托管在CDN上，而根据情况CDN的IP一般不会被封锁，因为CDN的IP为多个网站提供服务，假如不可抗因素不想搞得这么绝对去封锁CDN的IP，也是有办法的，也就是下面的办法</li>
+<li>SNI审查（SNI服务器名称指定的缩写，可以用你常用的搜索引擎搜索“SNI审查”试试看）<br>
+根据以上所说假如某情况下些不可抗力感觉封锁IP过于强硬（大发慈悲），则就会实行应用层协议的审查，也就是说中间设备能够理解应用层协议<br>
+但是现如今大多数网站都采用HTTPS协议，在正确配置，或者说一切都理想的情况下，中间设备无法解密，除非它算力特别高，瞬间就能穷举出解密密钥且花费的成本超级低，或者说发现了HTTPS协议的漏洞<br>
+但是现如今广泛使用的HTTPS协议有一个弱点，就是建立加密连接前的握手阶段，会有一些明文的数据交换，其中有一个值一般情况下是你要访问的网站的域名，只要该值触发了中间设备的某些判断条件，就直接将底层的TCP连接断开，阻止你访问，后面我们就用SNI来代指该值<br>
+（至于为什么要发这个值，可以认为IP像一个宿舍，SNI指明你要跟宿舍里的哪一个具体的人建立加密连接）<br>
+看到这里你可能会疑问，有办法吗？<br>
+有<br>
+我们要根据实践情况来判断，中间设备只有在SNI属于黑名单中的时候才会采取相应的措施，假如SNI不在黑名单中会如何？一般情况下会继续允许底层的这一个TCP连接的数据交换，也就是允许建立加密连接，理论上建立加密连接后我发什么中间设备都不能解密<br>
+并且即便是你发送的SNI的值没有与服务器匹配的证书，一般的服务器也都会返回一个默认证书（证书简单的说就是用来加密的钥匙，只不过该钥匙是经过签名认证的）<br>
+另一种情况是，根据宿舍的例子来讲，就是该宿舍所有人都用一个证书，不管你发什么SNI都返回一样的证书，但是有的SNI会触发中间设备的阻断<br>
+而中间设备一般并不会审查返回的证书，至于愿不愿意继续建立连接，则要看客户端愿不愿意<br>
+这里还有另一种情况，就是HTTP协议中的Host请求头字段，有的服务器强制该字段必须是返回的证书中指明的使用者的域或者子域，而不能是其他域，例如你与服务器返回的证书建立加密连接，该证书的使用者名称中没有域名pornhub.com但你却在Host字段中填入pornhub.com就会返回403<br>
+根据上面所述，之所以有些服务器允许SNI的值（注意是SNI的值）跟Host的值不匹配，并且成功返回Host指定的域的内容而不是SNI制定的域的内容，可能恰恰就是用于建立加密连接的证书被多个域共用，当然，这个完全看配置服务器的人怎么决定，他想怎么干怎么干<br>
+综上所述，只要能自定义SNI的值就能访问一些网站，但是现在最新版的浏览器都不允许扩展（区别于Flash之类的插件）修改该字段，但是修改Host是允许的<br>
+所以一般情况下都是借助于运行在与客户端同一台电脑上的代理来解决，当然在别的电脑上也可以，只不过像这种代理需要跟浏览器充当服务器，跟原本的服务器充当客户端，解密浏览器的数据，所以需要安装自签名根证书，每个电脑上单独生成一个根证书只在本地运行，则比较安全<br>
+能不能不需要安装自签名根证书？<br>
+除非你让证书颁发机构用目标网站的域名给你颁一个，一般情况下的前提是你要证明有该域名的所有权，才会颁给你<br>
+假如你用自己的域名行不行？行，但是浏览器会在后续资源的请求中把Referer请求头设置为你自己的域名，这样图片可能会因为判断为盗链而加载失败，除非你代理所有请求修改Referer请求头，等等问题<br>
+但这是没有必要的，因为一些网站只要代理HTML就好了，其他资源分属于不同域，有的都能够正常访问<br>
+其实针对SNI现在有一个新的增强，就是ESNI，也就是加密的SNI，大体上的原理似乎是在DNS解析出的结果中包含一个公钥来加密SNI，前提要保证DNS服务器安全，具体的我也不太了解，但听说中间设备是直接拒绝这种链接，简单粗暴，所以在局域网内部使用或许行，穿越XXX不太现实<br>
+#补充<br>
+大多数网站都不仅仅由一个域中的资源组成，但都是先加载主HTML然后根据主HTML中的链接一步步加载其他资源，假如将主HTML干扰封锁，那么就无法访问整个网站，反过来也同理，只要使主HTML能够访问，那么就能访问整个网站，只不过这样的网站不多，但有，比如</li>
+</ol>
+<blockquote>
+<p>Pixiv<br>
+Pornhub<br>
+也存在一些网站，网站没有被封锁，但是引用的外部脚本所在域被干扰，导致网站加载缓慢，这样的网站大多是国外的网站，例如<br>
+Stackoverflow</p>
+</blockquote>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[暂时免翻墙访问Pornhub（加拿大P站）的办法]]></title>
         <id>https://leikaifeng-goodboy.github.io/post/zan-shi-mian-fan-qiang-fang-wen-pornhubjia-na-da-p-zhan-de-ban-fa/</id>
