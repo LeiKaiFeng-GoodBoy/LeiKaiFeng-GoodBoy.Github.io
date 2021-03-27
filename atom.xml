@@ -2,13 +2,24 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://leikaifeng-goodboy.github.io/</id>
     <title>雷开封的贼窝</title>
-    <updated>2021-03-26T03:54:02.207Z</updated>
+    <updated>2021-03-27T06:51:44.817Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://leikaifeng-goodboy.github.io/"/>
     <link rel="self" href="https://leikaifeng-goodboy.github.io/atom.xml"/>
     <logo>https://leikaifeng-goodboy.github.io/images/avatar.png</logo>
     <icon>https://leikaifeng-goodboy.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, 雷开封的贼窝</rights>
+    <entry>
+        <title type="html"><![CDATA[C# 把字面量左移32位导致的BUG]]></title>
+        <id>https://leikaifeng-goodboy.github.io/post/c-ba-zi-mian-liang-zuo-yi-32-wei-dao-zhi-de-wei-ding-yi-xing-wei/</id>
+        <link href="https://leikaifeng-goodboy.github.io/post/c-ba-zi-mian-liang-zuo-yi-32-wei-dao-zhi-de-wei-ding-yi-xing-wei/">
+        </link>
+        <updated>2021-03-27T06:43:55.000Z</updated>
+        <content type="html"><![CDATA[<p>如题<br>
+<a href="https://docs.microsoft.com/zh-cn/dotnet/csharp/language-reference/operators/bitwise-and-shift-operators#shift-count-of-the-shift-operators">C#文档</a></p>
+<p><a href="https://stackoverflow.com/questions/7401888/why-doesnt-left-bit-shift-for-32-bit-integers-work-as-expected-when-used?noredirect=1">Stackoverflow类似问题</a></p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[浏览器访问网站的流程与干扰]]></title>
         <id>https://leikaifeng-goodboy.github.io/post/liu-lan-qi-fang-wen-wang-zhan-de-liu-cheng-yu-ying-yong/</id>
@@ -55,16 +66,14 @@ IP封锁简单粗暴，但也要看情况，比如并没有封锁全部的IP，�
 除非你让证书颁发机构用目标网站的域名给你颁一个，一般情况下的前提是你要证明有该域名的所有权，才会颁给你<br>
 假如你用自己的域名行不行？行，但是浏览器会在后续资源的请求中把Referer请求头设置为你自己的域名，这样图片可能会因为判断为盗链而加载失败，除非你代理所有请求修改Referer请求头，等等问题<br>
 但这是没有必要的，因为一些网站只要代理HTML就好了，其他资源分属于不同域，有的都能够正常访问<br>
-其实针对SNI现在有一个新的增强，就是ESNI，也就是加密的SNI，大体上的原理似乎是在DNS解析出的结果中包含一个公钥来加密SNI，前提要保证DNS服务器安全，具体的我也不太了解，但听说中间设备是直接拒绝这种链接，简单粗暴，所以在局域网内部使用或许行，穿越XXX不太现实<br>
-#补充<br>
-大多数网站都不仅仅由一个域中的资源组成，但都是先加载主HTML然后根据主HTML中的链接一步步加载其他资源，假如将主HTML干扰封锁，那么就无法访问整个网站，反过来也同理，只要使主HTML能够访问，那么就能访问整个网站，只不过这样的网站不多，但有，比如</li>
+其实针对SNI现在有一个新的增强，就是ESNI，也就是加密的SNI，大体上的原理似乎是在DNS解析出的结果中包含一个公钥来加密SNI，前提要保证DNS服务器安全，具体的我也不太了解，但听说中间设备是直接拒绝这种链接，简单粗暴，所以在局域网内部使用或许行，穿越XXX不太现实</li>
 </ol>
-<blockquote>
+<p>#补充<br>
+大多数网站都不仅仅由一个域中的资源组成，但都是先加载主HTML然后根据主HTML中的链接一步步加载其他资源，假如将主HTML干扰封锁，那么就无法访问整个网站，反过来也同理，只要使主HTML能够访问，那么就能访问整个网站，只不过这样的网站不多，但有，比如</p>
 <p>Pixiv<br>
-Pornhub<br>
-也存在一些网站，网站没有被封锁，但是引用的外部脚本所在域被干扰，导致网站加载缓慢，这样的网站大多是国外的网站，例如<br>
-Stackoverflow</p>
-</blockquote>
+Pornhub</p>
+<p>也存在一些网站，网站没有被封锁，但是引用的外部脚本所在域被干扰，导致网站加载缓慢，这样的网站大多是国外的网站，例如</p>
+<p>Stackoverflow</p>
 ]]></content>
     </entry>
     <entry>
