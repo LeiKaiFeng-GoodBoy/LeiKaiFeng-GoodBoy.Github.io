@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://leikaifeng-goodboy.github.io/</id>
     <title>雷开封的贼窝</title>
-    <updated>2021-03-27T06:51:44.817Z</updated>
+    <updated>2021-03-29T09:18:39.131Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://leikaifeng-goodboy.github.io/"/>
     <link rel="self" href="https://leikaifeng-goodboy.github.io/atom.xml"/>
@@ -43,7 +43,7 @@
 并且一般情况下DNS解析请求是明文的，所以也就很容易被沿途的设备拦截与修改<br>
 而且根据上网方式的不同，DNS服务器可能是自动配置的，所以DNS服务器本身就有问题<br>
 一般而言DNS污染相当有效，但也容易解决<br>
-比如手动映射域名与IP，更换默认的DNS服务器，在DNS服务器与浏览器支持的情况下使用HTTPS进行DNS查询，个人感觉比较有效却没有弹性的是手动映射域名与IP，因为某些情况，知名的DNS服务器可能访问缓慢，并且DNS服务器与浏览器都支持的情况下也可能无法建立HTTPS连接，中间设备阻止</li>
+比如手动映射域名与IP，更换默认的DNS服务器，在DNS服务器与浏览器支持的情况下使用HTTPS进行DNS查询</li>
 <li>IP封锁<br>
 IP封锁简单粗暴，但也要看情况，比如并没有封锁全部的IP，只是建立一个黑名单，而不是建立一个只有几个允许IP的白名单，这样的情况下大多数IP还是能够访问的，解决办法就包括代理服务器，但是也有其他办法，根据第一条所说，一个网站为了加速不同地区的访问可能不会只有一个IP，我们可以找到一个没有被封锁的IP然后手动映射域名指向这个IP<br>
 比如有些网站源站IP要么被封锁，要么访问缓慢，并且存在DNS污染，否则的话你会发现，该网站其实可以通过CDN的IP来访问，也就是该网站托管在CDN上，而根据情况CDN的IP一般不会被封锁，因为CDN的IP为多个网站提供服务，假如不可抗因素不想搞得这么绝对去封锁CDN的IP，也是有办法的，也就是下面的办法</li>
